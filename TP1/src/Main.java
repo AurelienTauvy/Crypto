@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.UnsupportedEncodingException;
 import java.security.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,19 +24,37 @@ import javax.crypto.spec.SecretKeySpec;
 // On fixe f(x) et on chechent y tel que f(y) = f(x), sans autres solution que d'essay pour des y 'aléatoires'
 
 public class Main {
-	 static int NBBIT = 9;
+	 private static final String charset = "UTF-8";
+	 static int NBBIT = 5;
+	 static String algo = "HmacSHA1";
 
-	public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeyException {
-		//System.out.println(toSha("Poisson", 5)); 
+	public static void main(String[] args) throws Exception {
+		
+		// Chacune des fonctions ci-dessous correspondent à une partie du TP.
+		// Pour les voir fonctionner, veuillez les decommenter une par une.
+		
+		System.out.println(toSha("Poisson", 5)); 
 		//trouverCollisionDic();
 		//Poisson();
-		
-		SecretKeySpec mdp = new SecretKeySpec("coucou".getBytes(), "SHA");
-		Mac mac = Mac.getInstance("SHA");
-		mac.init(mdp);
-		// to be continued
+		//HMAC();
 		
 	}
+	//Exercice sur le HMAC
+	private static void HMAC() throws Exception {
+		Mac mac = Mac.getInstance(algo);
+		SecretKeySpec mdp = new SecretKeySpec("coucou".getBytes(charset), mac.getAlgorithm());
+		
+		mac.init(mdp);
+		
+		mac.update("Ceci est mon premier HMAC SHA1.".getBytes(charset));
+		byte[] res = mac.doFinal();
+		
+		System.out.println(new String(res));
+		System.out.println(bytesToHex(res));
+		// On peut voir que la clef est plus longue, limitant les risques de collisions.
+		
+	}
+	// Permet de trouver les collisions avec le mot "poisson"
 	private static void Poisson() {
 		Random rng = new Random();
 		List<Boolean> poisson = toSha("poisson", NBBIT);
@@ -55,7 +74,7 @@ public class Main {
 
 	}
 		
-	
+	// Permet de trouver les collisions entre les mots du dictionnaire
 	private static void trouverCollisionDic() {
 		
 		List <String> mots = readFile("dic");
@@ -97,7 +116,8 @@ public class Main {
 	    return null;
 	  }
 	}
-	
+	// Calcule le sha d'un string et ne garde que les nnBit premiers bits.
+	// Retourne le resultat sous form d'un array de booleen.
 	public static List<Boolean> toSha(String str, int nbBit) {
 		try {
 			byte[] buffer = str.getBytes();
@@ -122,10 +142,17 @@ public class Main {
 			return aRet;
 			
 		} catch (NoSuchAlgorithmException e) {
-			System.err.println("Exception caught: " + e);
+			System.err.println("Un probléme est survenu : " + e);
 			e.printStackTrace();
 		}
 		return null;
 	}
-
+	// Transforme des bytes en valeurs hexadecimale
+	private static String bytesToHex(byte[] losByte){
+		StringBuilder sb = new StringBuilder();
+	    for (byte b : losByte) {
+	        sb.append(String.format("%02X ", b));
+	    }
+	    return sb.toString();
+	}
 }
