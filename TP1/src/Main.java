@@ -9,19 +9,19 @@ import java.util.Random;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 // Valeurs experimentales : 
-// 		Pour une taille de 5 bits, il y a une collision tout les 30 de paires de mots environ.
-//		Pour une taille de 6 bits, il y a une collision tout les 70 de paires de mots environ.
-//		Pour une taille de 7 bits, il y a une collision tou les 130 de paires de mots environ.
-//		Pour une taille de 8 bits, il y a une collision tou les 250 de paires de mots environ.
-//		Pour une taille de 9 bits, il y a une collision tou les 500 de paires de mots environ.
-//		Pour une taille de 10 bits, il y a une collision tou les 10000 de paires de mots environ.
-//      Cala correspond au resultat thÈoriques, en effet deux mots de N bits choisi "au hasard"
+// 		Pour une taille de 5 bits, il y a une collision toutes les 30 de paires de mots environ.
+//		Pour une taille de 6 bits, il y a une collision toutes les 70 de paires de mots environ.
+//		Pour une taille de 7 bits, il y a une collision toutes les 130 de paires de mots environ.
+//		Pour une taille de 8 bits, il y a une collision toutes les 250 de paires de mots environ.
+//		Pour une taille de 9 bits, il y a une collision toutes les 500 de paires de mots environ.
+//		Pour une taille de 10 bits, il y a une collision toutes les 10000 de paires de mots environ.
+//      Cala correspond aux resultats th√©oriques, en effet deux mots de N bits choisi "au hasard"
 //		ont 1/(2**n) d'etre identique 
 
 
 
-// La propriÈtÈ que nous essayons de casser est la rÈsistance ‡ la seconde preimage:
-// On fixe f(x) et on chechent y tel que f(y) = f(x), sans autres solution que d'essay pour des y 'alÈatoires'
+// La propri√©t√© que nous essayons de casser est la r√©sistance √† la seconde pr√©image:
+// On fixe f(x) et on chechent y tel que f(y) = f(x), sans autres solutions que d'essayer pour des y 'al√©atoires'
 
 public class Main {
 	 private static final String charset = "UTF-8";
@@ -30,10 +30,10 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		
-		// Chacune des fonctions ci-dessous correspondent ‡ une partie du TP.
-		// Pour les voir fonctionner, veuillez les decommenter une par une.
+		// Chacune des fonctions ci-dessous correspondent √† une partie du TP.
+		// Pour les voir fonctionner, veuillez les d√©commenter une par une.
 		
-		System.out.println(toSha("Poisson", 5)); 
+		//System.out.println(toSha("Poisson", 5)); 
 		//trouverCollisionDic();
 		//Poisson();
 		//HMAC();
@@ -66,7 +66,7 @@ public class Main {
 				comp.add(rng.nextBoolean());
 			}
 			if (poisson.equals(comp)) {
-				System.out.println("Collision trouvÈ apres " + nbessai + " essai");
+				System.out.println("Collision trouv√©e apres " + nbessai + " essai");
 				nbessai = 0;
 			}
 		comp.clear();
@@ -116,8 +116,8 @@ public class Main {
 	    return null;
 	  }
 	}
-	// Calcule le sha d'un string et ne garde que les nnBit premiers bits.
-	// Retourne le resultat sous form d'un array de booleen.
+	// Calcule le sha d'un string et ne garde que les nbBit premiers bits.
+	// Retourne le resultat sous forme d'un array de bool√©ens.
 	public static List<Boolean> toSha(String str, int nbBit) {
 		try {
 			byte[] buffer = str.getBytes();
@@ -132,7 +132,7 @@ public class Main {
 			byte b;
 			
 			List<Boolean> aRet = new ArrayList<>();
-			// Pour essayer d'ameliorer l'efficacitÈ on peut travailler bit par bit :  
+			// Pour essayer d'am√©liorer l'efficacit√© on peut travailler bit par bit :  
 			for (int i = 0 ; i < nbBit; i++) {
 				b = result[i/8];
 				Boolean nb = ((b >> i) & 1) == 1;
@@ -142,12 +142,12 @@ public class Main {
 			return aRet;
 			
 		} catch (NoSuchAlgorithmException e) {
-			System.err.println("Un problÈme est survenu : " + e);
+			System.err.println("Un probl√©me est survenu : " + e);
 			e.printStackTrace();
 		}
 		return null;
 	}
-	// Transforme des bytes en valeurs hexadecimale
+	// Transforme des bytes en valeurs hexadecimales
 	private static String bytesToHex(byte[] losByte){
 		StringBuilder sb = new StringBuilder();
 	    for (byte b : losByte) {
